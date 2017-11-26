@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+ 
+  <script src="./vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      template: `
+        <div>
+          <ul>
+            <li v-for="(hero,index) in heros" :style="'background-color:' + color[index]">
+               {{ index }} {{ hero.name }}
+            </li>
+          </ul>
+
+          添加英雄：<input type="text" placeholder="ID" v-model="addId">
+                   <input type="text" placeholder="英雄名称" v-model="addName"> 
+                   <button @click="addHero">添加英雄</button><br>
+          修改英雄：<input type="text" placeholder="ID" v-model="editId">
+                   <input type="text" placeholder="英雄名称" v-model="editName">
+                   <button @click="editHero">修改英雄</button><br>
+          删除英雄：<input type="text" placeholder="ID" v-model="delId">                
+          <button @click="delHero(delId)">删除英雄</button>
+        </div>
+      `,
+      data: {
+        heros: [{ id: 1, name: '李白' }, { id: 2, name: '八阿哥' }, { id: 3, name: '王母娘娘' }, { id: 4, name: '花木兰' }],
+        color: ['green', 'pink', 'skyblue', 'greenyellow', 'hotpink', 'red', 'purple'],
+        addId: '',
+        addName: '',
+        editId: '',
+        editName: '',
+        delId: '',
+      },
+      methods: {
+        // 添加英雄
+        addHero: function () {
+          this.heros.push({
+            id: this.addId,
+            name: this.addName
+          })
+
+          // 清空文本框
+          this.addId = '';
+          this.addName = '';
+        },
+
+        // 修改英雄
+        editHero: function () {
+          var hero = this.heros.find(ele => ele.id == this.editId);
+          if(!hero) {
+            alert('没有找到该英雄');
+            return;
+          }
+          hero.name = this.editName;
+
+          // 清空添加列表
+          this.editId = '';
+          this.editName = '';
+        },
+
+        // 删除英雄
+        delHero: function (id) {
+          var hero = this.heros.findIndex(ele => ele.id == id);
+          if(hero == -1) {
+            alert('没有找到该英雄');
+            return;
+          }
+          this.heros.splice(hero, 1);
+
+          // 清空文本框
+          this.delId = '';
+        }
+      }
+    })
+  </script>
+</body>
+</html>
