@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  
+  <script src="./vue.js"></script>
+  <script>
+    // 公共组件
+    var Cal = {
+      template: `
+        <div>
+          欢迎使用{{ calTitle }}计算器<br>
+          <input type="text" v-model="n1">
+          <input type="text" v-model="n2">
+          <button @click="sum" style="border: 1px solid #ccc">{{calTitle}}计算</button><br>
+          {{ result }}
+        </div>
+      `,
+      props: ['calTitle'],
+      data: function () {
+        return {
+          n1: '',
+          n2: '',
+          result: '',
+        }
+      },
+      methods: {
+        sum: function () {
+          this.result = (this.calTitle + '计算结果为：') + ((this.n1 - 0) + (this.n2 - 0))
+        }
+      }
+    }
+    // 将公共组件定义为全局组件
+    Vue.component('cal', Cal);
+    var sina = {
+      template: `
+        <div>
+          <cal :calTitle="sinaCal"></cal>
+        </div>
+      `,
+      data: function () {
+        return {
+          sinaCal: '新浪'
+        }
+      }
+    };
+    var baiDu = {
+      template: `
+        <div>
+          <cal :calTitle="baiDu"></cal>
+        </div>
+      `,
+      data: function () {
+        return {
+          baiDu: '百度'
+        }
+      }
+    };
+    var App = {
+      // 声明子组件
+      components: {
+        'sina': sina,
+        'baidu': baiDu
+      },
+      template: `
+        <div>
+          <sina></sina>
+          <baidu></baidu>
+        </div>
+      `,
+    }
+    new Vue({
+      el: '#app',
+      render: c => c(App)
+    })
+  </script>
+</body>
+</html>
